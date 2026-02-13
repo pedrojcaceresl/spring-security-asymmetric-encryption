@@ -98,36 +98,37 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
 #          passphrase: only if defined
-        script: |
-          # Navigate to app directory
-          cd /opt/${{ env.APP_NAME }} || mkdir -p /opt/${{ env.APP_NAME }} && cd /opt/${{ env.APP_NAME }}
-          
-          # Create .env file from secrets
-          cat > .env << EOF
-          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
-          APP_NAME=${{ env.APP_NAME }}
-          DB_URL=postgres-sql-spring-app
-          PG_DB_NAME=${{ secrets.PG_DB_NAME }}
-          PG_DB_USERNAME=${{ secrets.PG_DB_USERNAME }}
-          PG_DB_PASSWORD=${{ secrets.PG_DB_PASSWORD }}
-          EOF
-          
-          rm docker-compose.dev.yml
-          # Download docker-compose.dev.yml if it doesn't exist
-          if [! -f docker-compose.dev.yml ]
-            curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o docker-compose.dev.yml https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/docker-compose.dev.yml
-          fi
-          
-          # Pull latest image
-          docker compose -f docker-compose.dev.yml --env-file .env pull
-          
-          # Stop and remove old containers
-          docker compose -f docker-compose.dev.yml --env-file .env down
-          
-          # Start new containers
-          docker compose -f docker-compose.dev.yml --env-file .env up -d
-          
-          # Clean up old images
-          docker image prune -f
-          
+          script: |
+            # Navigate to app directory
+            cd /opt/${{ env.APP_NAME }} || mkdir -p /opt/${{ env.APP_NAME }} && cd /opt/${{ env.APP_NAME }}
+            
+            # Create .env file from secrets
+            cat > .env << EOF
+            DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+            APP_NAME=${{ env.APP_NAME }}
+            DB_URL=postgres-sql-spring-app
+            PG_DB_NAME=${{ secrets.PG_DB_NAME }}
+            PG_DB_USERNAME=${{ secrets.PG_DB_USERNAME }}
+            PG_DB_PASSWORD=${{ secrets.PG_DB_PASSWORD }}
+            EOF
+            
+            rm docker-compose.dev.yml
+            # Download docker-compose.dev.yml if it doesn't exist
+            if [! -f docker-compose.dev.yml ]
+              curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o docker-compose.dev.yml https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/docker-compose.dev.yml
+            fi
+            
+            # Pull latest image
+            docker compose -f docker-compose.dev.yml --env-file .env pull
+            
+            # Stop and remove old containers
+            docker compose -f docker-compose.dev.yml --env-file .env down
+            
+            # Start new containers
+            docker compose -f docker-compose.dev.yml --env-file .env up -d
+            
+            # Clean up old images
+            docker image prune -f
+            
