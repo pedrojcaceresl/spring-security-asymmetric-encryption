@@ -36,6 +36,7 @@ jobs:
 
       - name: Running Unit Tests
         run: |
+          chmod +x mvnw
           ./mvnw clean test
 
   build-and-deploy:
@@ -63,6 +64,7 @@ jobs:
       - name: Extract project version
         id: extract_version
         run: |
+          chmod +x mvnw
           echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT 
 
       - name: Build application
