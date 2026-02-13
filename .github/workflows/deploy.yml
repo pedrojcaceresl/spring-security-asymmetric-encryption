@@ -116,4 +116,18 @@ jobs:
           rm docker-compose.dev.yml
           # Download docker-compose.dev.yml if it doesn't exist
           if [! -f docker-compose.dev.yml ]
-            curl -H authorization
+            curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o docker-compose.dev.yml https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/docker-compose.dev.yml
+          fi
+          
+          # Pull latest image
+          docker compose -f docker-compose.dev.yml --env-file .env pull
+          
+          # Stop and remove old containers
+          docker compose -f docker-compose.dev.yml --env-file .env down
+          
+          # Start new containers
+          docker compose -f docker-compose.dev.yml --env-file .env up -d
+          
+          # Clean up old images
+          docker image prune -f
+          
