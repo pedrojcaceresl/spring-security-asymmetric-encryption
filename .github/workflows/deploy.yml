@@ -117,7 +117,7 @@ jobs:
             rm docker-compose.dev.yml
             # Download docker-compose.dev.yml if it doesn't exist
             if [ ! -f docker-compose.dev.yml ]; then
-              curl -o docker-compose.dev.yml https://raw.githubusercontent.com/ali-bouali/spring-security-asymmetric-encryption/refs/heads/main/docker-compose.dev.yml
+              curl -o docker-compose.dev.yml https://raw.githubusercontent.com/pedrojcaceresl/spring-security-asymmetric-encryption/refs/heads/main/docker-compose.dev.yml
             fi
             
             # Pull latest image
