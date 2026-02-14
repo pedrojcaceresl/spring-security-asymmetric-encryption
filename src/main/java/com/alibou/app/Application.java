@@ -22,6 +22,7 @@ public class Application {
                 roleRepository.save(
                         Role.builder()
                                 .name("ROLE_USER")
+                                .createdBy("SYSTEM")
                                 .build()
                 );
             }
